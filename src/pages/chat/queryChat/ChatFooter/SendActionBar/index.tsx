@@ -17,6 +17,7 @@ import { EmojiData } from "@/components/CKEditor";
 import { SendMessageParams } from "../useSendMessage";
 import CallPopContent from "./CallPopContent";
 import EmojiPopContent from "./EmojiPopContent";
+import styles from "./index.module.scss";
 
 const sendActionList = [
   {
@@ -59,6 +60,8 @@ i18n.on("languageChanged", () => {
   sendActionList[2].title = t("placeholder.video");
   sendActionList[3].title = t("placeholder.call");
 });
+
+
 
 const SendActionBar = ({
   sendEmoji,
@@ -133,6 +136,11 @@ const SendActionBar = ({
           </ActionWrap>
         );
       })}
+      <div className={styles.btns} >
+        <div ><span>查看简历</span></div>
+        <div ><span>发送职位</span></div>
+        <div ><span>邀请面试</span></div>
+      </div>
     </div>
   );
 };

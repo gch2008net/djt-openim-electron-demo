@@ -1,0 +1,19 @@
+.btns {
+    position: absolute;
+    right: 30px;
+    top: 15px;
+    display: flex;
+    align-items: center;
+    z-index: 1;
+    font-size: 14px;
+    color: #999;
+
+    span {
+        margin-left: 15px;
+        cursor: pointer;
+
+        &:hover {
+            color: #333;
+        }
+    }
+}

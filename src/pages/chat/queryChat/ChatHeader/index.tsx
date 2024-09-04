@@ -130,7 +130,7 @@ const ChatHeader = () => {
           </div>
         </div>
 
-        {!isNotification && (
+        {/* {!isNotification && (
           <div className="mr-5 flex">
             {menuList.map((menu) => {
               if (menu.idx === 4 && (isSingle || (!inGroup && !isSingle))) {
@@ -153,7 +153,7 @@ const ChatHeader = () => {
               );
             })}
           </div>
-        )}
+        )} */}
       </div>
       <SingleSetting ref={singleSettingRef} />
       <GroupSetting ref={groupSettingRef} />
