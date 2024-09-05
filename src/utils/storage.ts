@@ -32,12 +32,22 @@ export const setIMProfile = ({
   setTMUserID(userID);
 };
 
+export const setPositionInfo = ({
+  iM_DJT_POSITIONLIST,
+}: {
+  iM_DJT_POSITIONLIST: string;
+}) => {
+  //存储职位列表信息
+  localForage.setItem("IM_DJT_POSITIONLIST", iM_DJT_POSITIONLIST);
+};
+
 export const setLocale = (locale: string) => localStorage.setItem("IM_LOCALE", locale);
 
 export const clearIMProfile = () => {
   localForage.removeItem("IM_TOKEN");
   localForage.removeItem("IM_CHAT_TOKEN");
   localForage.removeItem("IM_USERID");
+  localForage.removeItem("IM_DJT_POSITIONLIST");
 };
 
 export const getAreaCode = () => localStorage.getItem("IM_AREA_CODE");
@@ -48,6 +58,7 @@ export const getLoginMethod = () =>
 export const getIMToken = async () => await localForage.getItem("IM_TOKEN");
 export const getChatToken = async () => await localForage.getItem("IM_CHAT_TOKEN");
 export const getIMUserID = async () => await localForage.getItem("IM_USERID");
+export const getPositionInfo =async () => localStorage.getItem("IM_DJT_POSITIONLIST");
 
 export const getLocale = (): LocaleString =>
   window.electronAPI?.ipcSendSync("getKeyStoreSync", { key: "language" }) ||

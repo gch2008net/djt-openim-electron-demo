@@ -17,3 +17,69 @@
         }
     }
 }
+
+.profilebox {
+
+    .title {
+        font-size: large;
+        font-weight: 600;
+        // padding: 20px auto 20px 10px;
+        margin-left: 15px;
+        padding-top: 20px;
+        padding-bottom: 20px;
+    }
+
+    .positionWrap {
+        padding: 10px;
+        max-height: 550px;
+        overflow-y: auto;
+        width: 750px;
+        height: 550px;
+    
+        .box {
+            border: 1px solid #f5f5f5;
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+    
+            &:hover {
+                border: 1px solid #999;
+            }
+    
+            .flex {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+    
+    
+    
+            }
+    
+            .top {
+                padding-bottom: 20px;
+    
+                .postName {
+                    font-size: 16px;
+                    color: #333;
+                    font-weight: bold;
+                }
+    
+                .payroll {
+                    color: #fa6a43;
+                }
+            }
+    
+            .bottom {
+                .que>span {
+                    margin-right: 5px;
+                    margin-left: 5px;
+                }
+    
+                .time {
+                    color: #999;
+                }
+            }
+        }
+    }
+}

@@ -13,6 +13,7 @@ import styles from "./message-item.module.scss";
 import MessageItemErrorBoundary from "./MessageItemErrorBoundary";
 import MessageSuffix from "./MessageSuffix";
 import TextMessageRender from "./TextMessageRender";
+import CustomMessageRender from "./CustomMessageRender";
 
 export interface IMessageItemProps {
   message: MessageItem;
@@ -26,6 +27,7 @@ const components: Record<number, FC<IMessageItemProps>> = {
   [MessageType.TextMessage]: TextMessageRender,
   [MessageType.PictureMessage]: MediaMessageRender,
   [MessageType.VideoMessage]: MediaMessageRender,
+  [MessageType.CustomMessage]: CustomMessageRender,
 };
 
 const MessageItem: FC<IMessageItemProps> = ({
