@@ -12,3 +12,7 @@ export const CHAT_URL = "https://imapi.51djt.com/chat";
 export const getWsUrl = () => localStorage.getItem("wsUrl") || WS_URL;
 export const getApiUrl = () => localStorage.getItem("apiUrl") || API_URL;
 export const getChatUrl = () => localStorage.getItem("chatUrl") || CHAT_URL;
+
+
+export const ENTERPRISE_URL = "http://enterprise-admin-dev.51djt.net";
+export const getEnterPriseUrl = () => localStorage.getItem("enterPriseUrl") || ENTERPRISE_URL;

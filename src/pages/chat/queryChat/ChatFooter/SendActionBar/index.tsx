@@ -20,12 +20,11 @@ import EmojiPopContent from "./EmojiPopContent";
 import styles from "./index.module.scss";
 import axios from 'axios';
 import {
-  setPositionInfo,
-  getPositionInfo,
   getIMUserID,
 } from "@/utils/storage";
 import { IMSDK } from "@/layout/MainContentWrap";
-import { useSendMessage } from "../useSendMessage";
+import { getEnterPriseUrl } from "@/config";
+import { useConversationStore, useUserStore } from "@/store";
 
 const sendActionList = [
   {
@@ -62,7 +61,11 @@ const sendActionList = [
   },
 ];
 
-var positionList=[
+var userInfo = {
+  "nickName": "",
+  "headPath": "",
+};
+var positionList = [
   {
     "id": 91,
     "postName": "测试谷3",
@@ -77,8 +80,9 @@ var positionList=[
     "postStatus": "1",
     "deadline": "2024-10-03",
     "modiDateTime": "2024-09-02 17:07:06",
-    "jobType": "实习"
-}
+    "jobType": "实习",
+
+  }
 ];
 
 i18n.on("languageChanged", () => {
@@ -87,8 +91,6 @@ i18n.on("languageChanged", () => {
   sendActionList[2].title = t("placeholder.video");
   sendActionList[3].title = t("placeholder.call");
 });
-
-
 
 const SendActionBar = ({
   sendEmoji,
@@ -111,9 +113,10 @@ const SendActionBar = ({
     [],
   );
 
-   
+  const currentConversation = useConversationStore(
+    (state) => state.currentConversation,
+  );
 
- 
   const fileHandle = async (options: UploadRequestOption) => {
     const fileEl = options.file as File;
     if (fileEl.size === 0) {
@@ -126,42 +129,37 @@ const SendActionBar = ({
     });
   };
 
+  const getPostionList = async (vis: boolean) => {
+    const IMUserID = await getIMUserID();
+    const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/PositionManagementList?postStatus=1&key=&pageNo=1&pageSize=100&userId=' + IMUserID);
+    positionList = response.data.data.datas;
+    userInfo.nickName = response.data.data.nickName;
+    userInfo.headPath = response.data.data.headPath;
+    setShowProfile(vis);
+  }
 
+  //发职位
+  const sendCardMessage = async (action: any) => {
+    let obj = {
+      ID: action.id,
+      PostType: action.jobType,
+      PostName: action.postName,
+      Payroll: action.payroll,
+      CompanyName: userInfo.nickName,
+      CompanyUrl: userInfo.headPath,
+    };
+    const { data: message } = await IMSDK.createCustomMessage({
+      data: JSON.stringify(obj),
+      extension: "position_msg",
+      description: "[职位消息]",
+    });
+    sendMessage({ message });
+    setShowProfile(false);
+  }
 
-
- const getPostionList=async (vis:boolean)=>{
-
-  let obj = {
-    ID: 1,
-    PostType: 1,
-    PostName: "职位名称",
-    Payroll: "sfsf",
-    CompanyName: "userName",
-    CompanyUrl: "headPath",
+  const handleClick = () => {
+    window.open(getEnterPriseUrl()+'/#/search/index?userid='+currentConversation?.userID, '_blank');
   };
-
-  const { data: message } =await IMSDK.createCustomMessage({
-    data: JSON.stringify(obj),
-    extension: "position_msg",
-    description: "[职位消息]",
-  });
-
-
-
-   sendMessage({ message });
-
-
-
-   debugger
-   const IMUserID = await getIMUserID();
-   const response = await axios.get('http://enterprise-admin-dev.51djt.net/api/Enterprise/PositionManagementList?postStatus=1&key=&pageNo=1&pageSize=100&userId=' + IMUserID);
-   debugger
-   positionList = response.data.data.datas;
-
-   setShowProfile(vis);
-
- }
-
 
   return (
     <div className="flex items-center px-4.5 pt-2">
@@ -206,22 +204,22 @@ const SendActionBar = ({
         );
       })}
       <div className={styles.btns} >
-        <div ><span>查看简历</span></div>
+        <div ><span onClick={handleClick}>查看简历</span></div>
         <div >
-        <Popover
-          content={ProfileContent}
-          trigger="click"
-          placement="rightBottom"
-          overlayClassName="profile-popover"
-          title={null}
-          arrow={false}
-          open={showProfile}
-          onOpenChange={(vis) =>getPostionList(vis) }
-        >
-          <span>发送职位</span>
+          <Popover
+            content={ProfileContent({ sendCardMessage })}
+            trigger="click"
+            placement="rightBottom"
+            overlayClassName="profile-popover"
+            title={null}
+            arrow={false}
+            open={showProfile}
+            onOpenChange={(vis) => getPostionList(vis)}
+          >
+            <span>发送职位</span>
           </Popover>
         </div>
-        <div ><span>邀请面试</span></div>
+        <div ><span onClick={handleClick}>邀请面试</span></div>
       </div>
     </div>
   );
@@ -255,65 +253,35 @@ const ActionWrap = ({
   );
 };
 
-
-const ProfileContent = (
-
-
-  <div className={styles.profilebox}>
-    <div className={styles.title} >发送职位</div>
-    <div className={styles.positionWrap}>
-
-    {positionList.map((action) => {
-
-
-      const sendCardMessage =async () => {
-        debugger
-        //发职位
-
-        let obj = {
-          ID: 1,
-          PostType: 1,
-          PostName: "职位名称",
-          Payroll: "sfsf",
-          CompanyName: "userName",
-          CompanyUrl: "headPath",
-        };
-        let PositionMessage = {
-          data: JSON.stringify(obj),
-          extension: "position_msg",
-          description: "[职位消息]",
-        };
-
-
-        const { data: message } =await IMSDK.createCustomMessage({
-          data: JSON.stringify(PositionMessage),
-          extension: "",
-          description: "",
-        });
-   
-
-        // sendMessage({ message });
-
-      }
-
-        return (
-          <div className={styles.box} onClick={sendCardMessage}>
-            <div className={clsx(styles.top, styles.flex)} >
-              <div className={styles.postName} >{action.postName}</div>
-              <div className={styles.payroll} >{action.payroll}</div>
-            </div>
-            <div className={clsx(styles.bottom, styles.flex)} >
-              <div className={styles.que} >
-                <span>{action.postCity}</span>|<span>{action.academicRequirements}</span>|<span>{action.experienceYear}</span>
+const ProfileContent = ({
+  sendCardMessage,
+}: {
+  sendCardMessage: (params: {}) => {};
+}) => {
+  return (
+    <div className={styles.profilebox}>
+      <div className={styles.title} >发送职位</div>
+      <div className={styles.positionWrap}>
+        {positionList.map((action) => {
+          return (
+            <div className={styles.box} onClick={() => sendCardMessage(action)}>
+              <div className={clsx(styles.top, styles.flex)} >
+                <div className={styles.postName} >{action.postName}</div>
+                <div className={styles.payroll} >{action.payroll}</div>
               </div>
-              <div className={styles.time}>{action.deadline}</div>
+              <div className={clsx(styles.bottom, styles.flex)} >
+                <div className={styles.que} >
+                  <span>{action.postCity}</span>|<span>{action.academicRequirements}</span>|<span>{action.experienceYear}</span>
+                </div>
+                <div className={styles.time}>{action.deadline}</div>
+              </div>
             </div>
-          </div>
-        );
-      })}
-
-  
-
+          );
+        })}
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
+
+

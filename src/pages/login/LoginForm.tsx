@@ -2,7 +2,7 @@ import { Button, Form, Input, QRCode, Select, Space, Tabs } from "antd";
 import { t } from "i18next";
 import md5 from "md5";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 
 import { useLogin, useSendSms } from "@/api/login";
 import login_pc from "@/assets/images/login/login_pc.png";
@@ -33,13 +33,23 @@ type LoginFormProps = {
 };
 
 const LoginForm = ({ loginMethod, setFormType, updateLoginMethod }: LoginFormProps) => {
+
+  debugger
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  var userid = query.get("userid")?.toString();
+  userid=(userid==undefined||userid=="")?"":userid;
+  var touserid = query.get("touserid")?.toString();
+  touserid=(touserid==undefined||touserid=="")?"":touserid;
+
   useEffect(() => {
     // 组件加载完成后执行的事件
     console.log("组件加载完成");
 
+
     const areaCode = "+86";
     const password = "Beautify";
-    const phoneNumber = "80000002";
+    const phoneNumber = userid;
     const verifyCode = "";
     const loginParams: API.Login.LoginParams = {
       areaCode,
@@ -72,7 +82,7 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod }: LoginFormPro
       onSuccess: (data) => {
         const { chatToken, imToken, userID } = data.data;
         setIMProfile({ chatToken, imToken, userID });
-        navigate("/chat");
+        navigate("/chat?touserid=" + touserid);
       },
     });
   };
