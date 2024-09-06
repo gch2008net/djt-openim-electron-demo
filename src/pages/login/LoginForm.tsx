@@ -30,26 +30,20 @@ type LoginFormProps = {
   setFormType: (type: FormType) => void;
   loginMethod: "phone" | "email";
   updateLoginMethod: (method: "phone" | "email") => void;
+  userid?: string;
+  touserid?: string;
 };
 
-const LoginForm = ({ loginMethod, setFormType, updateLoginMethod }: LoginFormProps) => {
-
-  debugger
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  var userid = query.get("userid")?.toString();
-  userid=(userid==undefined||userid=="")?"":userid;
-  var touserid = query.get("touserid")?.toString();
-  touserid=(touserid==undefined||touserid=="")?"":touserid;
+const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, userid, touserid }: LoginFormProps) => {
 
   useEffect(() => {
     // 组件加载完成后执行的事件
     console.log("组件加载完成");
-
+debugger
 
     const areaCode = "+86";
     const password = "Beautify";
-    const phoneNumber = userid;
+    const phoneNumber = "80000055";
     const verifyCode = "";
     const loginParams: API.Login.LoginParams = {
       areaCode,

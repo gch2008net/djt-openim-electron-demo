@@ -9,6 +9,7 @@ import ConfigModal from "./ConfigModal";
 import styles from "./index.module.scss";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
+import { useLocation } from "react-router-dom";
 
 export type FormType = 0 | 2;
 
@@ -21,6 +22,15 @@ export const Login = () => {
     setLoginMethod(method);
     saveLoginMethod(method);
   }, []);
+
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  var userid = query.get("userid")?.toString();
+  // userid=(userid==undefined||userid=="")?localStorage.getItem("djt_userid")?.toString():userid;
+
+  var touserid = query.get("touserid")?.toString();
+  // touserid=(touserid==undefined||touserid=="")?localStorage.getItem("djt_touserid")?.toString():touserid;
+
 
   return (
     <div className="relative flex h-full flex-col">
@@ -38,6 +48,8 @@ export const Login = () => {
               setFormType={setFormType}
               loginMethod={loginMethod}
               updateLoginMethod={updateLoginMethod}
+              userid={userid}
+              touserid={touserid}
             />
           )}
           {formType === 2 && (
