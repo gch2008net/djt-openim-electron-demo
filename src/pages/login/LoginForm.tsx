@@ -43,7 +43,7 @@ debugger
 
     const areaCode = "+86";
     const password = "Beautify";
-    const phoneNumber = "80000055";
+    const phoneNumber = userid;
     const verifyCode = "";
     const loginParams: API.Login.LoginParams = {
       areaCode,
