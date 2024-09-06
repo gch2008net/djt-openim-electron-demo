@@ -16,8 +16,7 @@ export const Chat = () => {
   useEffect(() => {
     // 组件加载完成后执行的事件
     console.log("组件加载完成");
-
-    if(!(touserid == undefined || touserid == "")){
+    if(!(touserid == undefined||touserid=="undefined" || touserid == "")){
       toSpecifiedConversation({
         sourceID: touserid,
         sessionType: SessionType.Single,

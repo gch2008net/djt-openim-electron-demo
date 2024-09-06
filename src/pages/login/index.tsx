@@ -25,12 +25,8 @@ export const Login = () => {
 
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  var userid = query.get("userid")?.toString();
-  // userid=(userid==undefined||userid=="")?localStorage.getItem("djt_userid")?.toString():userid;
-
+  var djt_token = query.get("djt_token")?.toString();
   var touserid = query.get("touserid")?.toString();
-  // touserid=(touserid==undefined||touserid=="")?localStorage.getItem("djt_touserid")?.toString():touserid;
-
 
   return (
     <div className="relative flex h-full flex-col">
@@ -48,7 +44,7 @@ export const Login = () => {
               setFormType={setFormType}
               loginMethod={loginMethod}
               updateLoginMethod={updateLoginMethod}
-              userid={userid}
+              djt_token={djt_token}
               touserid={touserid}
             />
           )}

@@ -19,6 +19,8 @@ import {
 import { areaCode } from "./areaCode";
 import type { FormType } from "./index";
 import styles from "./index.module.scss";
+import axios from 'axios';
+import { getEnterPriseUrl } from "@/config";
 
 // 0login 1resetPassword 2register
 enum LoginType {
@@ -30,34 +32,50 @@ type LoginFormProps = {
   setFormType: (type: FormType) => void;
   loginMethod: "phone" | "email";
   updateLoginMethod: (method: "phone" | "email") => void;
-  userid?: string;
+  djt_token?: string;
   touserid?: string;
 };
 
-const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, userid, touserid }: LoginFormProps) => {
+const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, touserid }: LoginFormProps) => {
 
   useEffect(() => {
     // 组件加载完成后执行的事件
     console.log("组件加载完成");
-debugger
 
-    const areaCode = "+86";
-    const password = "Beautify";
-    const phoneNumber = userid;
-    const verifyCode = "";
-    const loginParams: API.Login.LoginParams = {
-      areaCode,
-      password,
-      phoneNumber,
-      verifyCode,
-    };
-    onFinish(loginParams);
+    //用户验证
+    iMUserVerify(djt_token);
 
     // 如果需要清理副作用，可以返回一个函数
     return () => {
       console.log("组件卸载或更新前的清理");
     };
   }, []); // 空依赖数组表示只在组件加载时执行一次
+
+
+  const iMUserVerify = async (djt_token: any) => {
+    const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/IMUserVerify', {
+      headers: {
+        'Authorization': 'Bearer ' + djt_token,
+      }
+    });
+
+    if(response.data.status=1000){
+      debugger
+      const areaCode = "+86";
+      const password = "Beautify";
+      const phoneNumber = response.data.data;
+      const verifyCode = "";
+      const loginParams: API.Login.LoginParams = {
+        areaCode,
+        password,
+        phoneNumber,
+        verifyCode,
+      };
+      onFinish(loginParams);
+    }
+    
+
+  }
 
   const navigate = useNavigate();
   const [form] = Form.useForm();
