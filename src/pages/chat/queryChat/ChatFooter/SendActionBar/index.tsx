@@ -130,7 +130,12 @@ const SendActionBar = ({
   };
 
   const getPostionList = async (vis: boolean) => {
-    const IMUserID = await getIMUserID();
+
+    var IMUserID = await getIMUserID();
+    debugger
+    if (IMUserID == undefined || IMUserID == "") {
+      IMUserID = localStorage.getItem("IM_PHONE_NUM");
+    }
     const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/PositionManagementList?postStatus=1&key=&pageNo=1&pageSize=100&userId=' + IMUserID);
     positionList = response.data.data.datas;
     userInfo.nickName = response.data.data.nickName;
