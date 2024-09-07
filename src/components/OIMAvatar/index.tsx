@@ -1,10 +1,13 @@
 import { Avatar as AntdAvatar, AvatarProps } from "antd";
 import clsx from "clsx";
 import * as React from "react";
-import { useMemo } from "react";
+import { useMemo ,useEffect} from "react";
 
 import default_group from "@/assets/images/contact/group.png";
 import { avatarList, getDefaultAvatar } from "@/utils/avatar";
+import { useConversationToggle } from "@/hooks/useConversationToggle";
+import { SessionType } from "@openim/wasm-client-sdk";
+import { useLocation } from "react-router-dom";
 
 const default_avatars = avatarList.map((item) => item.name);
 
@@ -18,6 +21,26 @@ interface IOIMAvatarProps extends AvatarProps {
 }
 
 const OIMAvatar: React.FC<IOIMAvatarProps> = (props) => {
+  
+  var touserid = new URLSearchParams(useLocation().search).get("touserid")?.toString();
+  useEffect(() => {
+    // 组件加载完成后执行的事件
+    console.log("组件加载完成");
+    if (!(touserid == undefined || touserid == "undefined" || touserid == "")) {
+      toSpecifiedConversation({
+        sourceID: touserid!,
+        sessionType: SessionType.Single,
+      });
+    }
+
+    // 如果需要清理副作用，可以返回一个函数
+    return () => {
+      console.log("组件卸载或更新前的清理");
+    };
+  }, []); // 空依赖数组表示只在组件加载时执行一次
+
+  const { toSpecifiedConversation } = useConversationToggle();
+
   const {
     src,
     text,
