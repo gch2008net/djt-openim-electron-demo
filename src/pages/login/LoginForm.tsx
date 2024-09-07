@@ -120,7 +120,6 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
       <Form
         form={form}
         layout="vertical"
-        onFinish={onFinish}
         autoComplete="off"
         labelCol={{ prefixCls: "custom-form-item" }}
         initialValues={{
@@ -160,7 +159,7 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
           </Button>
         </Form.Item>
 
-        <div className="flex flex-row items-center justify-center">
+        {/* <div className="flex flex-row items-center justify-center">
           <span className="text-sm text-gray-400">
             {t("placeholder.registerToast")}
           </span>
@@ -170,7 +169,7 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
           >
             {t("placeholder.toRegister")}
           </span>
-        </div>
+        </div> */}
       </Form>
     </>
   );

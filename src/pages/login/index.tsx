@@ -30,7 +30,7 @@ export const Login = () => {
 
   return (
     <div className="relative flex h-full flex-col">
-      <div className="app-drag relative h-10 bg-[var(--top-search-bar)]">
+      <div className="app-drag relative h-10 bg-[var(--djt-primary-color)]">
         <WindowControlBar />
       </div>
       <div className="flex flex-1 items-center justify-center">
@@ -64,7 +64,7 @@ const LeftBar = () => {
   return (
     <div className="flex min-h-[420]">
       <div className="mr-14 text-center">
-        <div className="text-2xl" onDoubleClick={() => setConfigVisible(true)}>
+        <div className="text-2xl" >
           {t("placeholder.title")}
         </div>
         <span className="text-sm  text-gray-400">{t("placeholder.subTitle")}</span>

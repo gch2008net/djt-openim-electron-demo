@@ -167,13 +167,19 @@
 }
 
 .ant-btn-primary {
-  background-color: var(--primary);
+  background-color: var(--djt-primary-color);
 
   &:disabled {
     opacity: 0.5;
     color: #fff;
     background-color: var(--primary);
   }
+}
+
+:where(.css-dev-only-do-not-override-8gx2rx)
+.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+color: #fff;
+background: var(--djt-primary-color);
 }
 
 .ant-breadcrumb-link {
