@@ -15,19 +15,19 @@ export const EmptyChat = () => {
   return (
     <Layout className="no-mobile flex items-center justify-center bg-white">
       <div>
-        <div className="mb-12 flex flex-col items-center">
+        {/* <div className="mb-12 flex flex-col items-center">
           <div className="mb-3 text-xl font-medium">{t("placeholder.createGroup")}</div>
           <div className="text-[var(--sub-text)]">
             {t("placeholder.createGroupToast")}
           </div>
-        </div>
+        </div> */}
         <img src={empty_chat_bg} alt="" width={320} />
 
-        <div className="mt-28 flex justify-center">
+        {/* <div className="mt-28 flex justify-center">
           <Button className="px-8" type="primary" onClick={createNow}>
             {t("placeholder.createNow")}
           </Button>
-        </div>
+        </div> */}
       </div>
     </Layout>
   );
