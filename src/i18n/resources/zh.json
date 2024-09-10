@@ -334,7 +334,7 @@
     "groupAnnouncementPrefix": "[群公告]",
     "revokeMessage": "{{revoker}}撤回了一条消息",
     "advanceRevokeMessage": "{{operator}}撤回了一条{{revoker}}发送的消息",
-    "alreadyFriendMessage": "你们已经成为好友，可以开始聊天了！",
+    "alreadyFriendMessage": "你们可以开始聊天了！",
     "createGroupMessage": "{{creator}}创建了群聊",
     "updateGroupInfoMessage": "{{operator}}修改了群信息",
     "updateGroupNameMessage": "{{operator}}修改了群名称为{{name}}",
