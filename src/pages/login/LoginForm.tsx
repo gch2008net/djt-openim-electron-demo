@@ -53,7 +53,7 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
 
 
   const iMUserVerify = async (djt_token: any) => {
-    const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/IMUserVerify', {
+    const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/IMUserVerify?touserid=' + touserid, {
       headers: {
         'Authorization': 'Bearer ' + djt_token,
       }
