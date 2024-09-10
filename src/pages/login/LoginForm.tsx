@@ -62,7 +62,7 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
     if(response.data.status=1000){
       debugger
       const areaCode = "+86";
-      const password = "Beautify";
+      const password = "gch123";
       const phoneNumber = response.data.data;
       const verifyCode = "";
       const loginParams: API.Login.LoginParams = {
