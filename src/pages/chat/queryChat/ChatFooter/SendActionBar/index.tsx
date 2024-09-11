@@ -181,7 +181,7 @@ const SendActionBar = ({
         <div ><span onClick={handleClick}>查看简历</span></div>
         <div >
           <Popover
-            content={ProfileContent({ sendCardMessage })}
+            content={ProfileContent({ sendCardMessage, setShowProfile })}
             trigger="click"
             placement="rightBottom"
             overlayClassName="profile-popover"
@@ -229,8 +229,10 @@ const ActionWrap = ({
 
 const ProfileContent = ({
   sendCardMessage,
+  setShowProfile,
 }: {
-  sendCardMessage: (params: {}) => {};
+    sendCardMessage: (params: {}) => void;
+    setShowProfile: (vis: boolean) => void;
 }) => {
 
   const [positionList, setPositionList] = useState([
@@ -287,27 +289,34 @@ const ProfileContent = ({
 
   return (
     <Spin className="!max-h-none" spinning={isLoading} tip={"职位加载中，请稍等..."}>
-      <div className={styles.profilebox}>
-        <div className={styles.title} >发送职位</div>
-        <div className={styles.positionWrap}>
-          {positionList.map((action) => {
-            return (
-              <div className={styles.box} onClick={() => sendCardMessage(action)}>
-                <div className={clsx(styles.top, styles.flex)} >
-                  <div className={styles.postName} >{action.postName}</div>
-                  <div className={styles.payroll} >{action.payroll}</div>
-                </div>
-                <div className={clsx(styles.bottom, styles.flex)} >
-                  <div className={styles.que} >
-                    <span>{action.postCity}</span>|<span>{action.academicRequirements}</span>|<span>{action.experienceYear}</span>
-                  </div>
-                  <div className={styles.time}>{action.deadline}</div>
-                </div>
-              </div>
-            );
-          })}
+      {
+        <div className={styles.profilebox}>
+          <div className={styles.title} >发送职位
+            <button className={styles.btnClose} type="button" onClick={() => setShowProfile(false)} >X</button>
+          </div>
+          <div className={styles.positionWrap}>
+            {
+              positionList.length > 0 ?
+                positionList.map((action) => {
+                  return (
+                    <div className={styles.box} onClick={() => sendCardMessage(action)}>
+                      <div className={clsx(styles.top, styles.flex)} >
+                        <div className={styles.postName} >{action.postName}</div>
+                        <div className={styles.payroll} >{action.payroll}</div>
+                      </div>
+                      <div className={clsx(styles.bottom, styles.flex)} >
+                        <div className={styles.que} >
+                          <span>{action.postCity}</span>|<span>{action.academicRequirements}</span>|<span>{action.experienceYear}</span>
+                        </div>
+                        <div className={styles.time}>{action.deadline}</div>
+                      </div>
+                    </div>
+                  );
+                }) : <div className={styles.postName}>您还没有发布中的职位哦~</div>
+            }
+          </div>
         </div>
-      </div>
+      }
     </Spin>
   );
 };
