@@ -131,8 +131,8 @@ const SendActionBar = ({
     setShowProfile(false);
   }
 
-  const handleClick = () => {
-    window.open(getEnterPriseUrl()+'/#/search/index?userid='+currentConversation?.userID, '_blank');
+  const handleClick = (handle: string) => {
+    window.open(getEnterPriseUrl() + '/#/search/index?userid=' + currentConversation?.userID + "&handle=" + handle, '_blank');
   };
 
   return (
@@ -178,7 +178,7 @@ const SendActionBar = ({
         );
       })}
       <div className={styles.btns} >
-        <div ><span onClick={handleClick}>查看简历</span></div>
+        <div ><span onClick={()=>handleClick("v")}>查看简历</span></div>
         <div >
           <Popover
             content={ProfileContent({ sendCardMessage, setShowProfile })}
@@ -193,7 +193,7 @@ const SendActionBar = ({
             <span>发送职位</span>
           </Popover>
         </div>
-        <div ><span onClick={handleClick}>邀请面试</span></div>
+        <div ><span onClick={()=>handleClick('i')}>邀请面试</span></div>
       </div>
     </div>
   );
