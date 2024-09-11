@@ -75,7 +75,7 @@ const ConversationSider = () => {
     return () => {
       
     };
-  }, []); 
+  }, [conversationList.length]); 
 
   const getUsersInfoWithCache =async () => {
     if(conversationList.length>0){
