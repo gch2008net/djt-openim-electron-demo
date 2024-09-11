@@ -4,7 +4,7 @@ import { TooltipPlacement } from "antd/es/tooltip";
 import clsx from "clsx";
 import i18n, { t } from "i18next";
 import { UploadRequestOption } from "rc-upload/lib/interface";
-import { memo, ReactNode, useCallback, useState } from "react";
+import { memo, ReactNode, useCallback, useState ,useEffect} from "react";
 import React from "react";
 
 import { message as antdMessage } from "@/AntdGlobalComp";
@@ -25,6 +25,7 @@ import {
 import { IMSDK } from "@/layout/MainContentWrap";
 import { getEnterPriseUrl } from "@/config";
 import { useConversationStore, useUserStore } from "@/store";
+import { message } from "@/AntdGlobalComp";
 
 const sendActionList = [
   {
@@ -65,25 +66,6 @@ var userInfo = {
   "nickName": "",
   "headPath": "",
 };
-var positionList = [
-  {
-    "id": 91,
-    "postName": "测试谷3",
-    "postCity": "广东-深圳-罗湖区 田贝二路76",
-    "experienceYear": "在读学生",
-    "academicRequirements": "不限",
-    "payroll": "1000-4000元/月",
-    "serviceCode": "1001",
-    "noReadCount": 0,
-    "interviewCount": 0,
-    "candidateCount": 0,
-    "postStatus": "1",
-    "deadline": "2024-10-03",
-    "modiDateTime": "2024-09-02 17:07:06",
-    "jobType": "实习",
-
-  }
-];
 
 i18n.on("languageChanged", () => {
   sendActionList[0].title = t("placeholder.emoji");
@@ -128,20 +110,6 @@ const SendActionBar = ({
       message,
     });
   };
-
-  const getPostionList = async (vis: boolean) => {
-
-    var IMUserID = await getIMUserID();
-    debugger
-    if (IMUserID == undefined || IMUserID == "") {
-      IMUserID = localStorage.getItem("IM_PHONE_NUM");
-    }
-    const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/PositionManagementList?postStatus=1&key=&pageNo=1&pageSize=100&userId=' + IMUserID);
-    positionList = response.data.data.datas;
-    userInfo.nickName = response.data.data.nickName;
-    userInfo.headPath = response.data.data.headPath;
-    setShowProfile(vis);
-  }
 
   //发职位
   const sendCardMessage = async (action: any) => {
@@ -219,7 +187,7 @@ const SendActionBar = ({
             title={null}
             arrow={false}
             open={showProfile}
-            onOpenChange={(vis) => getPostionList(vis)}
+            onOpenChange={(vis) => setShowProfile(vis)}
           >
             <span>发送职位</span>
           </Popover>
@@ -263,6 +231,56 @@ const ProfileContent = ({
 }: {
   sendCardMessage: (params: {}) => {};
 }) => {
+
+  const [positionList, setPositionList] = useState([
+    {
+      "id": 0,
+      "postName": "",
+      "postCity": "",
+      "experienceYear": "",
+      "academicRequirements": "",
+      "payroll": "",
+      "serviceCode": "1001",
+      "noReadCount": 0,
+      "interviewCount": 0,
+      "candidateCount": 0,
+      "postStatus": "1",
+      "deadline": "",
+      "modiDateTime": "",
+      "jobType": "",
+  
+    }
+  ]);
+  
+  useEffect(() => {
+    // 组件加载完成后执行的事件
+    console.log("组件加载完成");
+
+    setTimeout(() => {
+      message.warning("setTimeout");
+      getPostionList();
+    }, 5000);
+
+    // 如果需要清理副作用，可以返回一个函数
+    return () => {
+      console.log("组件卸载或更新前的清理");
+    };
+  }, []); // 空依赖数组表示只在组件加载时执行一次
+
+  const getPostionList = async () => {
+    message.warning("getPostionListgetPostionListgetPostionList");
+    var IMUserID = await getIMUserID();
+    debugger
+    if (IMUserID == undefined || IMUserID == "") {
+      IMUserID = localStorage.getItem("IM_PHONE_NUM");
+    }
+    const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/PositionManagementList?postStatus=1&key=&pageNo=1&pageSize=100&userId=' + IMUserID);
+
+    setPositionList(response.data.data.datas);
+    userInfo.nickName = response.data.data.nickName;
+    userInfo.headPath = response.data.data.headPath;
+  }
+
   return (
     <div className={styles.profilebox}>
       <div className={styles.title} >发送职位</div>
