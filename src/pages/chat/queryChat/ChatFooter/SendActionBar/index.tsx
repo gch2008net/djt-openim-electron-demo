@@ -26,6 +26,7 @@ import { IMSDK } from "@/layout/MainContentWrap";
 import { getEnterPriseUrl } from "@/config";
 import { useConversationStore, useUserStore } from "@/store";
 import { message } from "@/AntdGlobalComp";
+import { Spin } from "antd";
 
 const sendActionList = [
   {
@@ -252,14 +253,17 @@ const ProfileContent = ({
     }
   ]);
   
+  const [isLoading, setIsLoading]  = useState(true);
+
   useEffect(() => {
     // 组件加载完成后执行的事件
     console.log("组件加载完成");
 
-    setTimeout(() => {
-      message.warning("setTimeout");
-      getPostionList();
-    }, 5000);
+    // setTimeout(() => {
+      
+    // }, 5000);
+    
+    getPostionList();
 
     // 如果需要清理副作用，可以返回一个函数
     return () => {
@@ -268,41 +272,43 @@ const ProfileContent = ({
   }, []); // 空依赖数组表示只在组件加载时执行一次
 
   const getPostionList = async () => {
-    message.warning("getPostionListgetPostionListgetPostionList");
     var IMUserID = await getIMUserID();
-    debugger
     if (IMUserID == undefined || IMUserID == "") {
       IMUserID = localStorage.getItem("IM_PHONE_NUM");
     }
     const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/PositionManagementList?postStatus=1&key=&pageNo=1&pageSize=100&userId=' + IMUserID);
-
-    setPositionList(response.data.data.datas);
-    userInfo.nickName = response.data.data.nickName;
-    userInfo.headPath = response.data.data.headPath;
+    if (response.data.status == 1000) {
+      setPositionList(response.data.data.datas);
+      userInfo.nickName = response.data.data.nickName;
+      userInfo.headPath = response.data.data.headPath;
+      setIsLoading(false);
+    }
   }
 
   return (
-    <div className={styles.profilebox}>
-      <div className={styles.title} >发送职位</div>
-      <div className={styles.positionWrap}>
-        {positionList.map((action) => {
-          return (
-            <div className={styles.box} onClick={() => sendCardMessage(action)}>
-              <div className={clsx(styles.top, styles.flex)} >
-                <div className={styles.postName} >{action.postName}</div>
-                <div className={styles.payroll} >{action.payroll}</div>
-              </div>
-              <div className={clsx(styles.bottom, styles.flex)} >
-                <div className={styles.que} >
-                  <span>{action.postCity}</span>|<span>{action.academicRequirements}</span>|<span>{action.experienceYear}</span>
+    <Spin className="!max-h-none" spinning={isLoading} tip={"职位加载中，请稍等..."}>
+      <div className={styles.profilebox}>
+        <div className={styles.title} >发送职位</div>
+        <div className={styles.positionWrap}>
+          {positionList.map((action) => {
+            return (
+              <div className={styles.box} onClick={() => sendCardMessage(action)}>
+                <div className={clsx(styles.top, styles.flex)} >
+                  <div className={styles.postName} >{action.postName}</div>
+                  <div className={styles.payroll} >{action.payroll}</div>
                 </div>
-                <div className={styles.time}>{action.deadline}</div>
+                <div className={clsx(styles.bottom, styles.flex)} >
+                  <div className={styles.que} >
+                    <span>{action.postCity}</span>|<span>{action.academicRequirements}</span>|<span>{action.experienceYear}</span>
+                  </div>
+                  <div className={styles.time}>{action.deadline}</div>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </Spin>
   );
 };
 
