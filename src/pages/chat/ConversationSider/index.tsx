@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { t } from "i18next";
-import { useRef } from "react";
+import { useRef,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Virtuoso, VirtuosoHandle } from "react-virtuoso";
 
@@ -11,6 +11,7 @@ import { useConversationStore, useUserStore } from "@/store";
 
 import ConversationItemComp from "./ConversationItem";
 import styles from "./index.module.scss";
+import { IMSDK } from "@/layout/MainContentWrap";
 
 const ConnectBar = () => {
   const userStore = useUserStore();
@@ -67,6 +68,26 @@ const ConversationSider = () => {
     hasmore.current = await getConversationListByReq(true);
   };
 
+  useEffect(() => {
+
+    getUsersInfoWithCache();
+    
+    return () => {
+      
+    };
+  }, []); 
+
+  const getUsersInfoWithCache =async () => {
+    if(conversationList.length>0){
+      const userIDList=conversationList.map((item) => {
+        return item.userID;
+      });
+      const { data } = await IMSDK.getUsersInfoWithCache({
+        userIDList: userIDList,
+      });
+      const friendInfo = data[0].friendInfo;//
+    }
+  }
   return (
     <div>
       <ConnectBar />
