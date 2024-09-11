@@ -2,7 +2,7 @@ import { Button, Form, Input, QRCode, Select, Space, Tabs } from "antd";
 import { t } from "i18next";
 import md5 from "md5";
 import { useEffect, useState } from "react";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { useLogin, useSendSms } from "@/api/login";
 import login_pc from "@/assets/images/login/login_pc.png";
@@ -19,7 +19,7 @@ import {
 import { areaCode } from "./areaCode";
 import type { FormType } from "./index";
 import styles from "./index.module.scss";
-import axios from 'axios';
+import axios from "axios";
 import { getEnterPriseUrl } from "@/config";
 import { message } from "@/AntdGlobalComp";
 
@@ -37,8 +37,13 @@ type LoginFormProps = {
   touserid?: string;
 };
 
-const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, touserid }: LoginFormProps) => {
-
+const LoginForm = ({
+  loginMethod,
+  setFormType,
+  updateLoginMethod,
+  djt_token,
+  touserid,
+}: LoginFormProps) => {
   useEffect(() => {
     // 组件加载完成后执行的事件
     console.log("组件加载完成");
@@ -52,16 +57,18 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
     };
   }, []); // 空依赖数组表示只在组件加载时执行一次
 
-
   const iMUserVerify = async (djt_token: any) => {
-    const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/IMUserVerify?touserid=' + touserid, {
-      headers: {
-        'Authorization': 'Bearer ' + djt_token,
-      }
-    });
+    const response = await axios.get(
+      getEnterPriseUrl() + "/api/Enterprise/IMUserVerify?touserid=" + touserid,
+      {
+        headers: {
+          Authorization: "Bearer " + djt_token,
+        },
+      },
+    );
 
     if (response.data.status == 1000) {
-      debugger
+      debugger;
       const areaCode = "+86";
       const password = "gch123";
       const phoneNumber = response.data.data;
@@ -76,7 +83,7 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
     } else {
       message.warning("会话已失效，请重新登录");
     }
-  }
+  };
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { mutate: login, isLoading: loginLoading } = useLogin();
