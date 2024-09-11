@@ -21,6 +21,7 @@ import type { FormType } from "./index";
 import styles from "./index.module.scss";
 import axios from 'axios';
 import { getEnterPriseUrl } from "@/config";
+import { message } from "@/AntdGlobalComp";
 
 // 0login 1resetPassword 2register
 enum LoginType {
@@ -59,7 +60,7 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
       }
     });
 
-    if(response.data.status=1000){
+    if (response.data.status == 1000) {
       debugger
       const areaCode = "+86";
       const password = "gch123";
@@ -72,11 +73,10 @@ const LoginForm = ({ loginMethod, setFormType, updateLoginMethod, djt_token, tou
         verifyCode,
       };
       onFinish(loginParams);
+    } else {
+      message.warning("会话已失效，请重新登录");
     }
-    
-
   }
-
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const { mutate: login, isLoading: loginLoading } = useLogin();
