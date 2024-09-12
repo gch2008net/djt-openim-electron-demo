@@ -35,6 +35,7 @@ type LoginFormProps = {
   updateLoginMethod: (method: "phone" | "email") => void;
   djt_token?: string;
   touserid?: string;
+  setIsLoading: (vid: boolean) => void;
 };
 
 const LoginForm = ({
@@ -43,6 +44,7 @@ const LoginForm = ({
   updateLoginMethod,
   djt_token,
   touserid,
+  setIsLoading,
 }: LoginFormProps) => {
   useEffect(() => {
     // 组件加载完成后执行的事件
@@ -102,6 +104,7 @@ const LoginForm = ({
         const { chatToken, imToken, userID } = data.data;
         setIMProfile({ chatToken, imToken, userID });
         navigate("/chat?touserid=" + touserid);
+        setIsLoading(false);
       },
     });
   };

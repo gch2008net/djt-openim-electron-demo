@@ -10,10 +10,12 @@ import styles from "./index.module.scss";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import { useLocation } from "react-router-dom";
+import { Spin } from "antd";
 
 export type FormType = 0 | 2;
 
 export const Login = () => {
+  const [isLoading, setIsLoading]  = useState(true);
   // 0login 2register
   const [formType, setFormType] = useState<FormType>(0);
   const [loginMethod, setLoginMethod] = useState<"phone" | "email">(getLoginMethod());
@@ -29,31 +31,34 @@ export const Login = () => {
   var touserid = query.get("touserid")?.toString();
 
   return (
-    <div className="relative flex h-full flex-col">
-      <div className="app-drag relative h-10 bg-[var(--djt-primary-color)]">
-        <WindowControlBar />
-      </div>
-      <div className="flex flex-1 items-center justify-center">
-        <LeftBar />
-        <div
-          className={`${styles.login} mr-14 h-[450px] w-[350px] rounded-md p-11`}
-          style={{ boxShadow: "0 0 30px rgba(0,0,0,.1)" }}
-        >
-          {formType === 0 && (
-            <LoginForm
-              setFormType={setFormType}
-              loginMethod={loginMethod}
-              updateLoginMethod={updateLoginMethod}
-              djt_token={djt_token}
-              touserid={touserid}
-            />
-          )}
-          {formType === 2 && (
-            <RegisterForm loginMethod={loginMethod} setFormType={setFormType} />
-          )}
+    <Spin className="!max-h-none" spinning={isLoading} tip={"正在加载中..."}>
+      <div className="relative flex h-full flex-col">
+        <div className="app-drag relative h-10 bg-[var(--djt-white)]">
+          <WindowControlBar />
+        </div>
+        <div className="flex flex-1 items-center justify-center">
+          <LeftBar />
+          <div
+            className={`${styles.login} mr-14 h-[450px] w-[350px] rounded-md p-11`}
+            style={{ boxShadow: "0 0 30px rgba(0,0,0,.1)" }}
+          >
+            {formType === 0 && (
+              <LoginForm
+                setFormType={setFormType}
+                loginMethod={loginMethod}
+                updateLoginMethod={updateLoginMethod}
+                djt_token={djt_token}
+                touserid={touserid}
+                setIsLoading={setIsLoading}
+              />
+            )}
+            {formType === 2 && (
+              <RegisterForm loginMethod={loginMethod} setFormType={setFormType} />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </Spin>
   );
 };
 
