@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { useCallback, useState } from "react";
+import { useCallback, useState,useEffect } from "react";
 
 import login_bg from "@/assets/images/login/login_bg.png";
 import WindowControlBar from "@/components/WindowControlBar";
@@ -9,8 +9,19 @@ import ConfigModal from "./ConfigModal";
 import styles from "./index.module.scss";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
-import { useLocation } from "react-router-dom";
 import { Spin } from "antd";
+import axios from "axios";
+import { getEnterPriseUrl } from "@/config";
+import { message } from "@/AntdGlobalComp";
+import {
+  setAreaCode,
+  setEmail,
+  setIMProfile,
+  setPhoneNumber,
+} from "@/utils/storage";
+import md5 from "md5";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useLogin } from "@/api/login";
 
 export type FormType = 0 | 2;
 
@@ -30,13 +41,73 @@ export const Login = () => {
   var djt_token = query.get("djt_token")?.toString();
   var touserid = query.get("touserid")?.toString();
 
+  useEffect(() => {
+    //用户验证
+    iMUserVerify(djt_token);
+   
+    return () => {
+       // 如果需要清理副作用，可以返回一个函数
+    };
+  }, []); // 空依赖数组表示只在组件加载时执行一次
+
+  const iMUserVerify = async (djt_token: any) => {
+    const response = await axios.get(
+      getEnterPriseUrl() + "/api/Enterprise/IMUserVerify?touserid=" + touserid,
+      {
+        headers: {
+          Authorization: "Bearer " + djt_token,
+        },
+      },
+    );
+
+    if (response.data.status == 1000) {
+      debugger;
+      const areaCode = "+86";
+      const password = "gch123";
+      const phoneNumber = response.data.data;
+      const verifyCode = "";
+      const loginParams: API.Login.LoginParams = {
+        areaCode,
+        password,
+        phoneNumber,
+        verifyCode,
+      };
+      onFinish(loginParams);
+    } else {
+      message.warning("会话已失效，请重新登录");
+    }
+  };
+
+  const navigate = useNavigate();
+  // const [form] = Form.useForm();
+  const { mutate: login } = useLogin();
+
+  const onFinish = (params: API.Login.LoginParams) => {
+    if (params.phoneNumber) {
+      setAreaCode(params.areaCode);
+      setPhoneNumber(params.phoneNumber);
+    }
+    if (params.email) {
+      setEmail(params.email);
+    }
+    params.password = md5(params.password);
+    login(params, {
+      onSuccess: (data) => {
+        const { chatToken, imToken, userID } = data.data;
+        setIMProfile({ chatToken, imToken, userID });
+        navigate("/chat?touserid=" + touserid);
+        setIsLoading(false);
+      },
+    });
+  };
+
   return (
-    <Spin className="!max-h-none" spinning={isLoading} tip={"正在加载中..."}>
+    <Spin className="!max-h-none" spinning={isLoading} tip={"会话加载中..."}>
       <div className="relative flex h-full flex-col">
         <div className="app-drag relative h-10 bg-[var(--djt-white)]">
           <WindowControlBar />
         </div>
-        <div className="flex flex-1 items-center justify-center">
+        {/* <div className="flex flex-1 items-center justify-center">
           <LeftBar />
           <div
             className={`${styles.login} mr-14 h-[450px] w-[350px] rounded-md p-11`}
@@ -56,7 +127,7 @@ export const Login = () => {
               <RegisterForm loginMethod={loginMethod} setFormType={setFormType} />
             )}
           </div>
-        </div>
+        </div> */}
       </div>
     </Spin>
   );
