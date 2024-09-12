@@ -133,7 +133,7 @@ export function useGlobalEvent() {
     IMSDK.on(CbEvents.OnConnecting, connectingHandler);
     IMSDK.on(CbEvents.OnConnectFailed, connectFailedHandler);
     IMSDK.on(CbEvents.OnConnectSuccess, connectSuccessHandler);
-    IMSDK.on(CbEvents.OnKickedOffline, kickHandler);
+    // IMSDK.on(CbEvents.OnKickedOffline, kickHandler);
     IMSDK.on(CbEvents.OnUserTokenExpired, expiredHandler);
     IMSDK.on(CbEvents.OnUserTokenInvalid, expiredHandler);
     // sync
@@ -380,7 +380,7 @@ export function useGlobalEvent() {
     IMSDK.off(CbEvents.OnConnecting, connectingHandler);
     IMSDK.off(CbEvents.OnConnectFailed, connectFailedHandler);
     IMSDK.off(CbEvents.OnConnectSuccess, connectSuccessHandler);
-    IMSDK.off(CbEvents.OnKickedOffline, kickHandler);
+    // IMSDK.off(CbEvents.OnKickedOffline, kickHandler);
     IMSDK.off(CbEvents.OnUserTokenExpired, expiredHandler);
     IMSDK.off(CbEvents.OnUserTokenInvalid, expiredHandler);
     // sync
