@@ -21,7 +21,7 @@ const CustomMessageRender: FC<IMessageItemProps> = ({ message }) => {
           </div>
         </div>
         <div className={styles.positionlistbox}>
-          <img src="/assets/user/user01.jpg" alt=""/>
+          {/* <img src="/assets/user/user01.jpg" alt=""/> */}
             <div>点金台职位</div>
         </div>
       </div>
@@ -50,7 +50,7 @@ const CustomMessageRender: FC<IMessageItemProps> = ({ message }) => {
            <span className={styles.jlInfoUser}>{content.EducationalBackground}</span>
        </div>
        <div className={styles.jlBoot}>
-           <img src="/assets/user/user01.jpg" alt=""/>
+           {/* <img src="/assets/user/user01.jpg" alt=""/> */}
            <div>点金台简历</div>
        </div>
    </div>

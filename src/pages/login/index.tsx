@@ -38,8 +38,9 @@ export const Login = () => {
 
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  var djt_token = query.get("djt_token")?.toString();
-  var touserid = query.get("touserid")?.toString();
+  const djt_token = query.get("djt_token")?.toString();
+  const userid = query.get("userid")?.toString();
+  const touserid = query.get("touserid")?.toString();
 
   useEffect(() => {
     //用户验证
@@ -51,31 +52,20 @@ export const Login = () => {
   }, []); // 空依赖数组表示只在组件加载时执行一次
 
   const iMUserVerify = async (djt_token: any) => {
-    const response = await axios.get(
-      getEnterPriseUrl() + "/api/Enterprise/IMUserVerify?touserid=" + touserid,
-      {
-        headers: {
-          Authorization: "Bearer " + djt_token,
-        },
-      },
-    );
-
-    if (response.data.status == 1000) {
-      debugger;
-      const areaCode = "+86";
-      const password = "gch123";
-      const phoneNumber = response.data.data;
-      const verifyCode = "";
-      const loginParams: API.Login.LoginParams = {
-        areaCode,
-        password,
-        phoneNumber,
-        verifyCode,
-      };
-      onFinish(loginParams);
-    } else {
-      message.warning("会话已失效，请重新登录");
-    }
+    const areaCode = "+86";
+    const password = "gch123";
+    const phoneNumber = userid;
+    const account = djt_token;
+    const verifyCode = touserid!;
+    const loginParams: API.Login.LoginParams = {
+      areaCode,
+      password,
+      phoneNumber,
+      verifyCode,
+      account,
+    };
+    debugger
+    onFinish(loginParams);
   };
 
   const navigate = useNavigate();
