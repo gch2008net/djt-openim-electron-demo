@@ -115,7 +115,7 @@ const SendActionBar = ({
   //发职位
   const sendCardMessage = async (action: any) => {
     let obj = {
-      ID: action.id,
+      ID: action.id.toString(),
       PostType: action.jobType,
       PostName: action.postName,
       Payroll: action.payroll,

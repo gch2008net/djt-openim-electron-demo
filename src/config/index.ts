@@ -2,7 +2,6 @@
 
 export const WS_URL = "wss://imapi.51djt.com/msg_gateway";
 export const API_URL = "https://imapi.51djt.com/api";
-// export const USER_URL = "https://xxx.com/chat";
 export const CHAT_URL = "https://imapi.51djt.com/chat";
 
 // export const WS_URL = "ws://192.168.8.110:10001";
