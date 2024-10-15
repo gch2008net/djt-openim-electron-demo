@@ -27,6 +27,7 @@ import { getEnterPriseUrl } from "@/config";
 import { useConversationStore, useUserStore } from "@/store";
 import { message } from "@/AntdGlobalComp";
 import { Spin } from "antd";
+import {  useLocation } from "react-router-dom";
 
 const sendActionList = [
   {
@@ -84,6 +85,11 @@ const SendActionBar = ({
   sendMessage: (params: SendMessageParams) => Promise<void>;
   createImageOrVideoMessage: (file: File) => Promise<MessageItem>;
 }) => {
+
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const handle = query.get("handle")?.toString();
+
   const [visibleState, setVisibleState] = useState({
     rtc: false,
     emoji: false,
@@ -177,7 +183,8 @@ const SendActionBar = ({
           </ActionWrap>
         );
       })}
-      <div className={styles.btns} >
+      {
+      handle=='m'&&  <div className={styles.btns} >
         <div ><span onClick={()=>handleClick("v")}>查看简历</span></div>
         <div >
           <Popover
@@ -194,7 +201,9 @@ const SendActionBar = ({
           </Popover>
         </div>
         <div ><span onClick={()=>handleClick('i')}>邀请面试</span></div>
-      </div>
+        </div>
+      }
+     
     </div>
   );
 };
