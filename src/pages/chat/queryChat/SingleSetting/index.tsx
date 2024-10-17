@@ -114,11 +114,11 @@ const SingleSetting: ForwardRefRenderFunction<OverlayVisibleHandle, unknown> = (
         value={currentConversation?.isPinned}
         tryChange={updateConversationPin}
       />
-      <SettingRow
+      {/* <SettingRow
         title={t("placeholder.moveBlacklist")}
         value={isBlack}
         tryChange={updateBlack}
-      />
+      /> */}
       <Divider className="m-0 border-4 border-[#F4F5F7]" />
       <SettingRow
         className="cursor-pointer"
@@ -129,13 +129,13 @@ const SingleSetting: ForwardRefRenderFunction<OverlayVisibleHandle, unknown> = (
       </SettingRow>
 
       <div className="flex-1" />
-      {isFriend && (
+      {/* {isFriend && (
         <div className="flex w-full justify-center pb-3 pt-24">
           <Button type="primary" danger onClick={tryUnfriend}>
             {t("placeholder.unfriend")}
           </Button>
         </div>
-      )}
+      )} */}
     </Drawer>
   );
 };

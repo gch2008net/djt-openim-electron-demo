@@ -43,6 +43,12 @@ const router = createHashRouter([
             },
             children: contactRoutes,
           },
+          {
+            path: "clear",
+            async lazy() {
+              return { Component: EmptyChat };
+            },
+          },
         ],
       },
       {

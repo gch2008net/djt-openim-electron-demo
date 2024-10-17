@@ -17,16 +17,16 @@ import GroupSetting from "../GroupSetting";
 import SingleSetting from "../SingleSetting";
 
 const menuList = [
-  {
-    title: t("placeholder.createGroup"),
-    icon: launch_group,
-    idx: 3,
-  },
-  {
-    title: t("placeholder.invitation"),
-    icon: launch_group,
-    idx: 4,
-  },
+  // {
+  //   title: t("placeholder.createGroup"),
+  //   icon: launch_group,
+  //   idx: 3,
+  // },
+  // {
+  //   title: t("placeholder.invitation"),
+  //   icon: launch_group,
+  //   idx: 4,
+  // },
   {
     title: t("placeholder.setting"),
     icon: settings,
@@ -130,7 +130,7 @@ const ChatHeader = () => {
           </div>
         </div>
 
-        {/* {!isNotification && (
+        {!isNotification && (
           <div className="mr-5 flex">
             {menuList.map((menu) => {
               if (menu.idx === 4 && (isSingle || (!inGroup && !isSingle))) {
@@ -153,10 +153,10 @@ const ChatHeader = () => {
               );
             })}
           </div>
-        )} */}
+        )}
       </div>
       <SingleSetting ref={singleSettingRef} />
-      <GroupSetting ref={groupSettingRef} />
+      {/* <GroupSetting ref={groupSettingRef} /> */}
     </Layout.Header>
   );
 };

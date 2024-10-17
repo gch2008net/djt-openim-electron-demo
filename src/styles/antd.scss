@@ -63,7 +63,7 @@
 }
 
 .chat-drawer {
-  margin-top: var(--searchbar-height);
+  // margin-top: var(--searchbar-height);
 
   .ant-drawer-content-wrapper {
     box-shadow: -7px 0px 7px 1px rgba(30, 116, 222, 0.05);
@@ -177,9 +177,9 @@
 }
 
 :where(.css-dev-only-do-not-override-8gx2rx)
-.ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-color: #fff;
-background: var(--djt-primary-color);
+  .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #fff;
+  background: var(--djt-primary-color);
 }
 
 .ant-breadcrumb-link {

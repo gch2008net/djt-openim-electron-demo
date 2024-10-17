@@ -28,7 +28,15 @@ export const useConversationStore = create<ConversationStore>()((set, get) => ({
         offset: isOffset ? get().conversationList.length : 0,
         count: CONVERSATION_SPLIT_COUNT,
       });
+
       tmpConversationList = data;
+
+      //isWithinLast30Day
+      tmpConversationList = tmpConversationList.filter((item) => {
+        const currentTime = Date.now(); // 当前时间的时间戳
+        const thirtyDaysInMillis = 30 * 24 * 60 * 60 * 1000; // 30天的毫秒数
+        return currentTime - item.latestMsgSendTime <= thirtyDaysInMillis;
+      });
     } catch (error) {
       feedbackToast({ error, msg: t("toast.getConversationFailed") });
       return true;

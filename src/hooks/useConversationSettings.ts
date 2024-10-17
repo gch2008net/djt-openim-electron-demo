@@ -5,8 +5,10 @@ import { useCallback } from "react";
 import { IMSDK } from "@/layout/MainContentWrap";
 import { useConversationStore } from "@/store";
 import { feedbackToast } from "@/utils/common";
+import { useParams, useNavigate } from "react-router-dom";
 
 export function useConversationSettings() {
+  const navigate = useNavigate();
   const { modal } = App.useApp();
 
   const currentConversation = useConversationStore(
@@ -39,6 +41,7 @@ export function useConversationSettings() {
           await IMSDK.clearConversationAndDeleteAllMsg(
             currentConversation.conversationID,
           );
+          navigate("/chat");
         } catch (error) {
           feedbackToast({ error, msg: t("toast.clearConversationMessagesFailed") });
         }
