@@ -74,7 +74,7 @@ const ConversationSider = () => {
   useEffect(() => {
     getUsersInfoWithCache();
 
-    return () => {};
+    return () => { };
   }, [conversationList.length]);
 
   const getUsersInfoWithCache = async () => {
@@ -131,8 +131,10 @@ const ConversationSider = () => {
               isActive={conversationID === conversation.conversationID}
               conversation={conversation}
             />
+
           )}
         />
+        <div className={styles.tSMsg}>以上是30天内的联系人</div>
         <button className={styles.clearAllConversation} onClick={clearAllConversation}>
           清空会话
         </button>
