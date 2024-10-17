@@ -176,6 +176,11 @@
   }
 }
 
+:where(.css-8gx2rx).ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
+  color: #fff;
+  background: var(--djt-primary-color);
+}
+
 :where(.css-dev-only-do-not-override-8gx2rx)
   .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
   color: #fff;
