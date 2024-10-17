@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import { useCallback, useState,useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 
 import login_bg from "@/assets/images/login/login_bg.png";
 import WindowControlBar from "@/components/WindowControlBar";
@@ -26,7 +26,7 @@ import { useLogin } from "@/api/login";
 export type FormType = 0 | 2;
 
 export const Login = () => {
-  const [isLoading, setIsLoading]  = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   // 0login 2register
   const [formType, setFormType] = useState<FormType>(0);
   const [loginMethod, setLoginMethod] = useState<"phone" | "email">(getLoginMethod());
@@ -41,13 +41,15 @@ export const Login = () => {
   const djt_token = query.get("djt_token")?.toString();
   const userid = query.get("userid")?.toString();
   const touserid = query.get("touserid")?.toString();
+  const handle = query.get("handle")?.toString();
+  localStorage.setItem("djthandle", handle!);
 
   useEffect(() => {
     //用户验证
     iMUserVerify(djt_token);
-   
+
     return () => {
-       // 如果需要清理副作用，可以返回一个函数
+      // 如果需要清理副作用，可以返回一个函数
     };
   }, []); // 空依赖数组表示只在组件加载时执行一次
 

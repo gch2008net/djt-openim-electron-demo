@@ -4,7 +4,7 @@ import { TooltipPlacement } from "antd/es/tooltip";
 import clsx from "clsx";
 import i18n, { t } from "i18next";
 import { UploadRequestOption } from "rc-upload/lib/interface";
-import { memo, ReactNode, useCallback, useState ,useEffect} from "react";
+import { memo, ReactNode, useCallback, useState, useEffect } from "react";
 import React from "react";
 
 import { message as antdMessage } from "@/AntdGlobalComp";
@@ -27,7 +27,6 @@ import { getEnterPriseUrl } from "@/config";
 import { useConversationStore, useUserStore } from "@/store";
 import { message } from "@/AntdGlobalComp";
 import { Spin } from "antd";
-import {  useLocation } from "react-router-dom";
 
 const sendActionList = [
   {
@@ -85,11 +84,6 @@ const SendActionBar = ({
   sendMessage: (params: SendMessageParams) => Promise<void>;
   createImageOrVideoMessage: (file: File) => Promise<MessageItem>;
 }) => {
-
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
-  const handle = query.get("handle")?.toString();
-
   const [visibleState, setVisibleState] = useState({
     rtc: false,
     emoji: false,
@@ -184,26 +178,26 @@ const SendActionBar = ({
         );
       })}
       {
-      handle=='m'&&  <div className={styles.btns} >
-        <div ><span onClick={()=>handleClick("v")}>查看简历</span></div>
-        <div >
-          <Popover
-            content={ProfileContent({ sendCardMessage, setShowProfile })}
-            trigger="click"
-            placement="rightBottom"
-            overlayClassName="profile-popover"
-            title={null}
-            arrow={false}
-            open={showProfile}
-            onOpenChange={(vis) => setShowProfile(vis)}
-          >
-            <span>发送职位</span>
-          </Popover>
-        </div>
-        <div ><span onClick={()=>handleClick('i')}>邀请面试</span></div>
+        localStorage.getItem("djthandle") != 'm' && <div className={styles.btns} >
+          <div ><span onClick={() => handleClick("v")}>查看简历</span></div>
+          <div >
+            <Popover
+              content={ProfileContent({ sendCardMessage, setShowProfile })}
+              trigger="click"
+              placement="rightBottom"
+              overlayClassName="profile-popover"
+              title={null}
+              arrow={false}
+              open={showProfile}
+              onOpenChange={(vis) => setShowProfile(vis)}
+            >
+              <span>发送职位</span>
+            </Popover>
+          </div>
+          <div ><span onClick={() => handleClick('i')}>邀请面试</span></div>
         </div>
       }
-     
+
     </div>
   );
 };
@@ -240,8 +234,8 @@ const ProfileContent = ({
   sendCardMessage,
   setShowProfile,
 }: {
-    sendCardMessage: (params: {}) => void;
-    setShowProfile: (vis: boolean) => void;
+  sendCardMessage: (params: {}) => void;
+  setShowProfile: (vis: boolean) => void;
 }) => {
 
   const [positionList, setPositionList] = useState([
@@ -260,20 +254,20 @@ const ProfileContent = ({
       "deadline": "",
       "modiDateTime": "",
       "jobType": "",
-  
+
     }
   ]);
-  
-  const [isLoading, setIsLoading]  = useState(true);
+
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // 组件加载完成后执行的事件
     console.log("组件加载完成");
 
     // setTimeout(() => {
-      
+
     // }, 5000);
-    
+
     getPostionList();
 
     // 如果需要清理副作用，可以返回一个函数
