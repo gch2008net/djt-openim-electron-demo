@@ -15,6 +15,10 @@ export function useConversationSettings() {
     (state) => state.currentConversation,
   );
 
+  const delConversationByCID = useConversationStore(
+    (state) => state.delConversationByCID,
+  );
+
   const updateConversationPin = useCallback(
     async (isPinned: boolean) => {
       if (!currentConversation) return;
@@ -49,9 +53,29 @@ export function useConversationSettings() {
     });
   }, [currentConversation?.conversationID]);
 
+  const delConversation = useCallback(() => {
+    if (!currentConversation) return;
+    modal.confirm({
+      title: "删除会话",
+      content: "确认删除会话吗？",
+      onOk: async () => {
+        try {
+          await IMSDK.deleteConversationAndDeleteAllMsg(currentConversation?.conversationID);
+
+          await delConversationByCID(currentConversation?.conversationID)
+
+          navigate("/chat");
+        } catch (error) {
+          feedbackToast({ error, msg: "删除会话失败！" });
+        }
+      },
+    });
+  }, [currentConversation?.conversationID]);
+
   return {
     currentConversation,
     updateConversationPin,
     clearConversationMessages,
+    delConversation,
   };
 }

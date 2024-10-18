@@ -17,7 +17,7 @@ const SingleSetting: ForwardRefRenderFunction<OverlayVisibleHandle, unknown> = (
   _,
   ref,
 ) => {
-  const { currentConversation, updateConversationPin, clearConversationMessages } =
+  const { currentConversation, updateConversationPin, clearConversationMessages, delConversation } =
     useConversationSettings();
 
   const isBlack = useContactStore((state) => state.blackList).some(
@@ -36,8 +36,8 @@ const SingleSetting: ForwardRefRenderFunction<OverlayVisibleHandle, unknown> = (
         isBlack
           ? await IMSDK.removeBlack(currentConversation?.userID)
           : await IMSDK.addBlack({
-              toUserID: currentConversation?.userID,
-            });
+            toUserID: currentConversation?.userID,
+          });
       } catch (error) {
         feedbackToast({ error, msg: t("toast.updateBlackStateFailed") });
       }
@@ -124,6 +124,14 @@ const SingleSetting: ForwardRefRenderFunction<OverlayVisibleHandle, unknown> = (
         className="cursor-pointer"
         title={t("toast.clearChatHistory")}
         rowClick={clearConversationMessages}
+      >
+        <RightOutlined rev={undefined} />
+      </SettingRow>
+
+      <SettingRow
+        className="cursor-pointer"
+        title={'删除会话'}
+        rowClick={delConversation}
       >
         <RightOutlined rev={undefined} />
       </SettingRow>
