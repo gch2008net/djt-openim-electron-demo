@@ -13,5 +13,8 @@ export const getApiUrl = () => localStorage.getItem("apiUrl") || API_URL;
 export const getChatUrl = () => localStorage.getItem("chatUrl") || CHAT_URL;
 
 
-export const ENTERPRISE_URL = "http://enterprise-admin-dev.51djt.net";
+
+export const ENTERPRISE_URL = "https://enterpriseapi.51djt.com";
+
+// export const ENTERPRISE_URL = "http://enterprise-admin-dev.51djt.net";
 export const getEnterPriseUrl = () => localStorage.getItem("enterPriseUrl") || ENTERPRISE_URL;
