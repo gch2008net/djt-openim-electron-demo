@@ -64,8 +64,11 @@ const sendActionList = [
 ];
 
 var userInfo = {
+  "userId": "",
   "nickName": "",
   "headPath": "",
+  "jobStatus": "",
+  "userType": "",
 };
 
 i18n.on("languageChanged", () => {
@@ -91,6 +94,8 @@ const SendActionBar = ({
 
   const [showProfile, setShowProfile] = useState(false);
 
+  const [showUserType, setShowUserType] = useState(false);
+
   const closeAllPop = useCallback(
     () => setVisibleState({ rtc: false, emoji: false }),
     [],
@@ -99,6 +104,39 @@ const SendActionBar = ({
   const currentConversation = useConversationStore(
     (state) => state.currentConversation,
   );
+
+  useEffect(() => {
+    // 组件加载完成后执行的事件
+    console.log("组件加载完成");
+    debugger
+    //获取当前会话用户信息
+    getCurrentUserInfo();
+
+    // 如果需要清理副作用，可以返回一个函数
+    return () => {
+      console.log("组件卸载或更新前的清理");
+    };
+  }, [currentConversation?.userID]); // 空依赖数组表示只在组件加载时执行一次
+
+  const getCurrentUserInfo = async () => {
+    const response = await axios.get(
+      getEnterPriseUrl() + "/api/Enterprise/GetCurrentUserInfo?userid=" + currentConversation?.userID,
+    );
+    debugger
+    if (response.data.status == 1000) {
+      userInfo.userId = response.data.data.userId;
+      userInfo.jobStatus = response.data.data.jobStatus;
+      userInfo.userType = response.data.data.userType;
+      setShowUserType(response.data.data.userType == "0" ? true : false);
+
+    } else {
+      userInfo.userId = "";
+      userInfo.jobStatus = "";
+      userInfo.userType = "";
+      setShowUserType(false);
+      antdMessage.warning("当前会话用户信息获取失败!");
+    }
+  }
 
   const fileHandle = async (options: UploadRequestOption) => {
     const fileEl = options.file as File;
@@ -132,7 +170,11 @@ const SendActionBar = ({
   }
 
   const handleClick = (handle: string) => {
-    window.open(getEnterPriseUrl() + '/#/search/index?userid=' + currentConversation?.userID + "&handle=" + handle, '_blank');
+    if (userInfo.jobStatus != "我暂时不想找工作") {
+      window.open(getEnterPriseUrl() + '/#/search/index?userid=' + currentConversation?.userID + "&handle=" + handle, '_blank');
+    } else {
+      antdMessage.warning("用户暂未公开!");
+    }
   };
 
   return (
@@ -178,7 +220,7 @@ const SendActionBar = ({
         );
       })}
       {
-        localStorage.getItem("djthandle") != 'm' && <div className={styles.btns} >
+        <div style={{ display: showUserType ? 'flex' : 'none' }} className={styles.btns} >
           <div ><span onClick={() => handleClick("v")}>查看简历</span></div>
           <div >
             <Popover
