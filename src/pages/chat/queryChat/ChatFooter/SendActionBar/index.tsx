@@ -63,14 +63,6 @@ const sendActionList = [
   // },
 ];
 
-var userInfo = {
-  "userId": "",
-  "nickName": "",
-  "headPath": "",
-  "jobStatus": "",
-  "userType": "",
-};
-
 i18n.on("languageChanged", () => {
   sendActionList[0].title = t("placeholder.emoji");
   sendActionList[1].title = t("placeholder.image");
@@ -94,7 +86,16 @@ const SendActionBar = ({
 
   const [showProfile, setShowProfile] = useState(false);
 
-  const [showUserType, setShowUserType] = useState(false);
+  const [currentUser, setCurrentUser] = useState({
+    nickName: "",
+    headPath: "",
+  });
+
+  const [currentConversationUser, setCurrentConversationUser] = useState({
+    userId: "",
+    userType: "",
+    jobStatus: "",
+  });
 
   const closeAllPop = useCallback(
     () => setVisibleState({ rtc: false, emoji: false }),
@@ -124,16 +125,13 @@ const SendActionBar = ({
     );
     debugger
     if (response.data.status == 1000) {
-      userInfo.userId = response.data.data.userId;
-      userInfo.jobStatus = response.data.data.jobStatus;
-      userInfo.userType = response.data.data.userType;
-      setShowUserType(response.data.data.userType == "0" ? true : false);
-
+      setCurrentConversationUser(response.data.data);
     } else {
-      userInfo.userId = "";
-      userInfo.jobStatus = "";
-      userInfo.userType = "";
-      setShowUserType(false);
+      setCurrentConversationUser({
+        userId: "",
+        userType: "",
+        jobStatus: "",
+      });
       antdMessage.warning("当前会话用户信息获取失败!");
     }
   }
@@ -157,8 +155,8 @@ const SendActionBar = ({
       PostType: action.jobType,
       PostName: action.postName,
       Payroll: action.payroll,
-      CompanyName: userInfo.nickName,
-      CompanyUrl: userInfo.headPath,
+      CompanyName: currentUser.nickName,
+      CompanyUrl: currentUser.headPath,
     };
     const { data: message } = await IMSDK.createCustomMessage({
       data: JSON.stringify(obj),
@@ -170,7 +168,7 @@ const SendActionBar = ({
   }
 
   const handleClick = (handle: string) => {
-    if (userInfo.jobStatus != "我暂时不想找工作") {
+    if (currentConversationUser.jobStatus != "我暂时不想找工作") {
       window.open(getEnterPriseUrl() + '/#/search/index?userid=' + currentConversation?.userID + "&handle=" + handle, '_blank');
     } else {
       antdMessage.warning("用户暂未公开!");
@@ -220,11 +218,11 @@ const SendActionBar = ({
         );
       })}
       {
-        <div style={{ display: showUserType ? 'flex' : 'none' }} className={styles.btns} >
+        <div style={{ display: (currentConversationUser.userType == "0") ? 'flex' : 'none' }} className={styles.btns} >
           <div ><span onClick={() => handleClick("v")}>查看简历</span></div>
           <div >
             <Popover
-              content={ProfileContent({ sendCardMessage, setShowProfile })}
+              content={ProfileContent({ sendCardMessage, setShowProfile, setCurrentUser })}
               trigger="click"
               placement="rightBottom"
               overlayClassName="profile-popover"
@@ -275,9 +273,11 @@ const ActionWrap = ({
 const ProfileContent = ({
   sendCardMessage,
   setShowProfile,
+  setCurrentUser,
 }: {
   sendCardMessage: (params: {}) => void;
   setShowProfile: (vis: boolean) => void;
+  setCurrentUser: (params: { nickName: string; headPath: string; }) => void;
 }) => {
 
   const [positionList, setPositionList] = useState([
@@ -326,8 +326,10 @@ const ProfileContent = ({
     const response = await axios.get(getEnterPriseUrl() + '/api/Enterprise/PositionManagementList?postStatus=1&key=&pageNo=1&pageSize=100&userId=' + IMUserID);
     if (response.data.status == 1000) {
       setPositionList(response.data.data.datas);
-      userInfo.nickName = response.data.data.nickName;
-      userInfo.headPath = response.data.data.headPath;
+      setCurrentUser({
+        nickName: response.data.data.nickName,
+        headPath: response.data.data.headPath
+      });
       setIsLoading(false);
     }
   }
