@@ -218,7 +218,7 @@ const SendActionBar = ({
         );
       })}
       {
-        <div style={{ display: (currentConversationUser.userType == "0") ? 'flex' : 'none' }} className={styles.btns} >
+        <div style={{ display: (localStorage.getItem("djthandle") != 'm' && currentConversationUser.userType == "0") ? 'flex' : 'none' }} className={styles.btns} >
           <div ><span onClick={() => handleClick("v")}>查看简历</span></div>
           <div >
             <Popover
