@@ -171,7 +171,7 @@ const SendActionBar = ({
     if (currentConversationUser.jobStatus != "我暂时不想找工作") {
       window.open(getEnterPriseUrl() + '/#/search/index?userid=' + currentConversation?.userID + "&handle=" + handle, '_blank');
     } else {
-      antdMessage.warning("用户暂未公开!");
+      antdMessage.warning("该用户简历未公开或状态不在求职中!");
     }
   };
 
